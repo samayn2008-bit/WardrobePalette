@@ -1,0 +1,108 @@
+<!---Connect style.css, set up the layout, connect the javascript-->
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wardrobe Palette </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-shell">
+        <header class = "app-header">
+            <div>
+                <p class = "eyebrow">PERSONAL COLOR STUDIO</p>
+                <h1>Wardrobe Palette</h1>
+                <p class = "subtitle"> 
+                    Discover the colors that make your wardrobe work together.
+                </p>
+            </div>
+
+            <div class="header-badge">
+                <span class = "badge-dot"></span>
+                Color matching
+            </div>
+        </header>
+
+        <main class = "app-layout">
+            <section class = "main-column">
+                <section class = "upload-card">
+                    <div class = "upload-icon"></div>
+                    <h2>Analyze a shirt</h2>
+                    <p>
+                        Upload a photo and find out the dominant color.
+                    </p>
+                    <label class="upload-button" for = "imageInput">
+                        Choose a photo
+                    </label>
+
+                    <input id = "imageInput" type = "file" accept = "image/*">
+                    <span class = "upload-hint">
+                        JPG, PNG, GIF, or BMP
+                    </span>
+                </section>
+                
+                <section class = "workspace-card">
+                    <div class = "section-heading">
+                        <div>
+                        <p class = "eyebrow">PREVIEW</p>
+                        <h2>Your garment</h2>
+                        </div>
+
+                        <span class = "status-pill">
+                            
+                        </span>
+                    </div>
+                    
+                    <div class = "preview-frame">
+                        <canvas id = "preview"></canvas>
+
+                        <div id = "previewPlaceholder">
+                            <span class = "placeholder-icon"></span>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <div class = "color-result">
+                        <div id ="colorSwatch" class = "color-Swatch"></div>
+
+                        <div>
+                            <p class="eyebrow">DETECTED COLOR</p>
+                            <h3 id = "colorName">No color detected</h3>
+                            <p id = "colorDetails">
+                                Upload an image to begin.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <aside class="pants-panel">
+                <div class = "section-heading">
+                    <div>
+                        <p class = "eyebrow">COLOR THEORY</p>
+                        <h2>Matching pants</h2>
+                    </div>
+
+                    <span class = "pants-count">(pant count)</span>
+                </div>
+
+                <p class = "panel-description">
+                    Recommended colors ranked by how well they complement your shirt.
+                </p>
+
+                <div id = "pantList"></div>
+
+            </aside>
+        </main>
+
+        <footer class = "app-footer">
+            <span>WARDROBE PALETTE</span>
+            <span>Built for everyday color decisions</span>
+        </footer>
+     </div>
+
+     <script src="app.js"></script>
+</body>
+</html>
+
