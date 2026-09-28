@@ -13,6 +13,40 @@
     box-sizing: border-box;
 }
 
+/* Custom background */
+body {
+    position: relative;
+    overflow-x: hidden;
+    background: var(--ink);
+}
+
+body::before {
+    position: fixed;
+    inset: -20%;
+    z-index: -1;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #241513 0,
+            #241513 90px,
+            #3a211c 160px,
+            #512d24 230px,
+            #241513 320px
+        );
+    content: "";
+    animation: backgroundWave 5s linear infinite;
+}
+
+@keyframes backgroundWave {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(320px);
+    }
+}
+
 body {
     margin: 0;
     background: var(--ink);
