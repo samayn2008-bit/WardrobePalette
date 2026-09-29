@@ -2,7 +2,7 @@
 :root {
     --ink: #4f322c;
     --cream:#fef0e7;
-    --muted: #b489d6;
+    --muted: #f8bfff;
     --sage:#e2d69a;
     --line: rgba(243, 240, 231, 0.14);
     --shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
@@ -151,7 +151,7 @@ p {
 .upload-card, .workspace-card, .pants-panel {
     border: 1px solid var(--line);
     border-radius: 24px;
-    background: rgba(243, 240, 231, 0.06);
+    background: rgba(243, 240, 231, 0.12);
     box-shadow: var(--shadow);
     backdrop-filter: blur(18px);
 }
@@ -194,6 +194,28 @@ p {
 }
 
 .upload-button {
+    /* let the button behave like one while fitting the content */
+    display: inline-flex;
+    position: relative;
+    /*keep the button above decorative elements*/
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+    padding: 13px 20px;
+    border-radius: 999px;
+    background: var(--cream);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#selectionColorButton {
     /* let the button behave like one while fitting the content */
     display: inline-flex;
     position: relative;
@@ -342,7 +364,7 @@ p {
 }
 
 .panel-description {
-    margin: 16px 0 2px;
+    margin: 16px 0 16px;
     color: var(--muted);
     font-size: 0.85rem;
     line-height: 1.5;
@@ -376,6 +398,11 @@ p {
     transform: translateX(6px);
 }
 
+.pant-information {
+    flex: 1;
+    min-width: 0;
+}
+
 .pant-swatch {
     width: 38px;
     height: 38px;
@@ -405,4 +432,36 @@ p {
     font-size: 0.7rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+}
+
+.pant-score {
+    width: 100%;
+    height: 6px;
+    margin-top: 8px;
+    background: rgba(254, 240, 231, 0.25);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.pant-score-fill {
+    height: 100%;
+    background: var(--cream);
+    border-radius: inherit;
+    transition: width 0.5s ease;
+}
+
+#resetButton {
+    margin-left: 10px;
+    padding: 13px 20px;
+    border: 1px solid var(--cream);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--cream);
+    cursor: pointer;
+    font: inherit;
+}
+
+#resetButton:hover {
+    background: var(--cream);
+    color: var(--ink);
 }
