@@ -36,6 +36,10 @@
                         Choose a photo
                     </label>
 
+                    <button id="resetButton" type="button">
+                        Reset
+                    </button>
+
                     <input id = "imageInput" type = "file" accept = "image/*">
                     <span class = "upload-hint">
                         JPG, PNG, GIF, or BMP
@@ -48,20 +52,22 @@
                         <p class = "eyebrow">PREVIEW</p>
                         <h2>Your garment</h2>
                         </div>
-
-                        <span class = "status-pill">
-                            
-                        </span>
                     </div>
                     
                     <div class = "preview-frame">
                         <canvas id = "preview"></canvas>
+
 
                         <div id = "previewPlaceholder">
                             <span class = "placeholder-icon"></span>
                             <p></p>
                         </div>
                     </div>
+
+                    <p id = "selectionHint">
+                        Drag over the shirt to identify its color.
+                    </p>
+                    <button id="selectionColorButton" type="button" > Change selection color</button>
 
                     <div class = "color-result">
                         <div id ="colorSwatch" class = "color-Swatch"></div>
@@ -88,7 +94,7 @@
                 </div>
 
                 <p class = "panel-description">
-                    Recommended colors ranked by how well they complement your shirt.
+                    Best options for colors
                 </p>
 
                 <div id = "pantList"></div>
@@ -100,9 +106,7 @@
             <span>WARDROBE PALETTE</span>
             <span>Built for everyday color decisions</span>
         </footer>
-     </div>
-
-     <script src="app.js"></script>
+    </div>
+    <script type="module" src="app.js"></script>    
 </body>
 </html>
-
