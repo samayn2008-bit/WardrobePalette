@@ -1,27 +1,68 @@
 # Wardrobe Palette
 
-Wardrobe Palette is a Java desktop app that helps match clothing colors.
+Wardrobe Palette is a browser-based color-matching app that helps users find pants that complement a shirt.
 
-Upload a photo of a shirt or top, and the program detects its overall color and ranks different pant colors based on how well they match.
+Users can upload or paste an image, select the shirt area, and receive color-based pants recommendations.
 
 ## Features
-- Upload or drag and drop an image
-- Detect the image's average color
-- Display the detected color and hex value
-- Rank matching pant colors
-- Simple Java Swing interface
+- Upload, drag and drop, or paste an image
+- Manually select the shirt with a drag box
+- Calculate the selected region’s average RGB color
+- Display a readable detected color name
+- Show the detected color with a sample
+- Rank compatible pant colors from strongest to weakest match
+- Display recommendation scores with visual bars
+- Change the selection-border color
+- Reset the current analysis
+- Interactive interface with animations
 
 ## Built With
-- Java
-- Java Swing
-- AWT
-- HSL/HSB color comparison
+- HTML
+- CSS
+- JavaScript
+- HTML Canvas API
+- RGB and HSB color calculations
 
-## Running the Project
-Compile:
+## Project Structure
 
-javac WardrobePaletteApp.java
+```bash
+wardrobe-javascript/
+├── index.html
+├── style.css
+└── app.js
 
-Run:
+```
 
-java WardrobePaletteApp
+## How to Run Wardrobe Palette
+
+1. Download or clone the project.
+  
+2. Open Terminal and move into the project folder:
+```bash
+cd "/Users/your-name/App Project/wardrobe-javascript"
+```
+
+4. Start a local web server, enter this:
+```bash
+python3 -m http.server 8000
+```
+
+4. Open a browser and open:
+http://localhost:8000
+
+
+6. Use the app
+- Click Choose a photo.
+- Drag an image into the page.
+- Paste an image with Command + V on macOS or Ctrl + V on Windows/Linux.
+- Drag a selection box over the shirt.
+- Release the mouse to analyze the selected color.
+- View the detected color and ranked pants recommendations.
+
+6. To stop the server, go back to Terminal and press:
+```Plain text
+Control + C
+```
+
+
+
