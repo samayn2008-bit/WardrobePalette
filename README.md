@@ -35,7 +35,10 @@ wardrobe-javascript/
 
 ## How to Run Wardrobe Palette
 
-1. Download or clone the project.
+1. Download or clone the folder called:
+```text
+wardrobe-app
+```
   
 2. Open Terminal and move into the project folder:
 ```bash
