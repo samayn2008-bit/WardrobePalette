@@ -5,19 +5,24 @@ const context = preview.getContext("2d", {
     willReadFrequently: true
 });
 
+// Set up DOM references for buttons
+const resetButton = document.querySelector("#resetButton");
 const selectionColorButton = document.querySelector("#selectionColorButton");
 let selectionColor = "#fef0e7";
 
+// Set up DOM references for buttons
 const colorName = document.querySelector("#colorName");
 const colorDetails = document.querySelector("#colorDetails");
 const visualSwatch = document.querySelector("#colorSwatch");
+
+// Set up DOM references for pants
 const pantList = document.querySelector("#pantList");
 const pantCount = document.querySelector(".pants-count");
 const resetButton = document.querySelector("#resetButton");
 const previewFrame = document.querySelector(".preview-frame");
 const previewPlaceholder = document.querySelector("#previewPlaceholder");
 
-
+// Initialize variables for tracking the image upload
 let originalCanvas = null;
 let selection = null;
 let selectionStart = null;
@@ -25,26 +30,28 @@ let selectionStart = null;
 //Make the array of pants options
 const pants = [
     {name: "Khaki", hex: "#C3B091"}, 
-    {name: "Navy", hex: "#1F2A44"},
-    {name: "Charcoal", hex: "#36393D"},
-    {name: "Olive", hex: "#556B2F"},
+    {name: "Navy Blue", hex: "#1F2A44"},
+    {name: "Charcoal Gray", hex: "#36393D"},
+    {name: "Olive Green", hex: "#556B2F"},
     {name: "Black", hex: "#1B1B1D"},
     {name: "White", hex: "#F5F5F0"},
-    {name: "Denim blue", hex: "#4B6584"},
+    {name: "Denim Blue", hex: "#4B6584"},
     {name: "Burgundy", hex: "#6E2C3B"}
 ];
 
-
+//rgbToHsb function converts (red, green, blue) to (hue, saturation, brightness) for color comparison
 function rgbToHsb(color) {
     //rgb ranges from 0-255 and Hsb ranges from 0 to 1
     const r = color.r / 255;
     const g = color.g / 255;
     const b = color.b / 255;
 
+    //Find strongest and weakest RGB channel values
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     const delta = max - min;
 
+    //Calculate hue based on whichever RGB channel is strongest
     let h = 0;
     if (delta !== 0) {
         if (max === r) h = (g - b) / delta + (g < b ? 6 : 0);
