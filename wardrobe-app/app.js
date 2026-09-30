@@ -9,18 +9,19 @@ const context = preview.getContext("2d", {
 const resetButton = document.querySelector("#resetButton");
 const selectionColorButton = document.querySelector("#selectionColorButton");
 let selectionColor = "#fef0e7";
+const selectionHint = document.querySelector("#selectionHint");
 
-// Set up DOM references for buttons
+//Set up DOM references for the detected color section
 const colorName = document.querySelector("#colorName");
 const colorDetails = document.querySelector("#colorDetails");
 const visualSwatch = document.querySelector("#colorSwatch");
 
-// Set up DOM references for pants
+//Set up DOM references for pants
 const pantList = document.querySelector("#pantList");
 const pantCount = document.querySelector(".pants-count");
-const resetButton = document.querySelector("#resetButton");
 const previewFrame = document.querySelector(".preview-frame");
 const previewPlaceholder = document.querySelector("#previewPlaceholder");
+const matchStatus = document.querySelector("#matchStatus");
 
 // Initialize variables for tracking the image upload
 let originalCanvas = null;
@@ -35,13 +36,13 @@ const pants = [
     {name: "Olive Green", hex: "#556B2F"},
     {name: "Black", hex: "#1B1B1D"},
     {name: "White", hex: "#F5F5F0"},
-    {name: "Denim Blue", hex: "#4B6584"},
+    {name: "Denim blue", hex: "#4B6584"},
     {name: "Burgundy", hex: "#6E2C3B"}
 ];
 
 //rgbToHsb function converts (red, green, blue) to (hue, saturation, brightness) for color comparison
 function rgbToHsb(color) {
-    //rgb ranges from 0-255 and Hsb ranges from 0 to 1
+    //Convert each RGB channel from a 0–255 range to a 0–1 range
     const r = color.r / 255;
     const g = color.g / 255;
     const b = color.b / 255;
@@ -114,7 +115,7 @@ function updateColorResult(averageColor) {
     displayPants(hsbColor);
 }
 
-
+// Analyze the pixels inside selected region and calculate average RGB
 function analyzeSelectedRegion() {
     if (!originalCanvas || !selection) {
         return;
@@ -153,7 +154,7 @@ function analyzeSelectedRegion() {
     updateColorResult(averageColor);
 }
 
-
+//Convert mouse position into coordinates that match the canvas image
 function getCanvasPoint(event) {
     const bounds = preview.getBoundingClientRect();
 
@@ -171,6 +172,7 @@ function getCanvasPoint(event) {
     };
 }
 
+//Rank pants by compatability and display them
 function displayPants(shirtHsb) {
     pantList.innerHTML = "";
 
@@ -218,10 +220,11 @@ function displayPants(shirtHsb) {
             
         pantList.appendChild(card);
     }
-
     pantCount.textContent = `${pants.length} colors`;
+    matchStatus.textContent = "Color matched";
 }
 
+// Redraw the original image and display the selection border
 function redrawPreview() {
     if (!originalCanvas) {
         return;
@@ -275,43 +278,85 @@ function hexToRgb(hex) {
     };
 }
 
+//Find distance of two specific hues in an image
 function hueDistance(firstHue, secondHue) {
     const difference = Math.abs(firstHue - secondHue);
     return Math.min(difference, 360 - difference);
 }
 
+//Calculate how well a pair of pants matches the shirt color
 function calculatePantScore(shirtHsb, pantHex) {
     const pantRgb = hexToRgb(pantHex);
     const pantHsb = rgbToHsb(pantRgb);
 
+    //Find distance between shirt hue and pant hue
     const hueDifference = hueDistance(shirtHsb.h, pantHsb.h);
 
+    //Store the pant's hue compatability score
     let hueScore;
 
+    //Similar hues get a moderate score
+    //A larger hue difference creates a complementary contrast
     if (hueDifference < 25) {
         hueScore = 70;
     } else if (hueDifference < 60) {
         hueScore = 85;
     } else if (hueDifference < 120) {
         hueScore = 100;
+    //Other combinations are set at an acceptable level
     } else {
         hueScore = 75;
     }
 
+    //Measure the difference between shirt and pants brightness
     const brightnessDifference =
         Math.abs(shirtHsb.b - pantHsb.b);
 
+    //Turn the brightness contrast into a score
     const contrastScore = Math.min(
         100,
         50 + brightnessDifference
     );
 
+    //Combine the two score with hue as 60% and contrast as 40% 
     return Math.round(
         hueScore * 0.6 + contrastScore * 0.4
     );
 }
 
-//record the dragging of the mouse
+//Load the image into the app
+function loadImageFile(file) {
+    if (!file) {
+        return;
+    }
+    // make the canvas same size as image
+    const image = new Image();
+    image.onload = () => {
+        preview.width = image.width;
+        preview.height = image.height;
+
+        originalCanvas = document.createElement("canvas");
+        originalCanvas.width = image.width;
+        originalCanvas.height = image.height;
+
+        const originalContext = originalCanvas.getContext("2d");
+        context.clearRect(0, 0, preview.width, preview.height);
+        originalContext.drawImage(image, 0, 0);
+
+        context.drawImage(image, 0, 0);
+        
+        //remove the container border after image upload
+        previewFrame.classList.add("has-image");
+        preview.style.visibility = "visible";
+        preview.style.borderColor = "#f3f0e7";
+        previewPlaceholder.style.display = "none";
+    }
+
+    image.src = URL.createObjectURL(file);
+
+}
+
+//record when the mouse is pressed and save those coordinates
 preview.addEventListener("mousedown", (event) => {
     const point = getCanvasPoint(event);
 
@@ -322,9 +367,10 @@ preview.addEventListener("mousedown", (event) => {
         width: 0,
         height: 0
     };
+    selectionHint.textContent = "Release to analyze this area";
 });
 
-//track mouse movement
+//track mouse movement when dragging over the image
 preview.addEventListener("mousemove", (event) => {
     if (!selectionStart) {
         return;
@@ -349,6 +395,7 @@ preview.addEventListener("mouseup", () => {
     if (selection && selection.width > 5 && selection.height > 5) {
         analyzeSelectedRegion();
     }
+    selectionHint.textContent = "Selection analyzed: drag again to retry";
 });
 
 //Reset button event listener
@@ -373,38 +420,30 @@ resetButton.addEventListener("click", () => {
 
     pantList.innerHTML = "";
     pantCount.textContent = "0 colors";
+    matchStatus.textContent = "Color matching";
+    selectionHint.innerHTML = `<span class="hint-icon">↗</span>Click and drag over the shirt to identify its color`;
+});
+
+//Allow the user to paste images into the file
+//Reset if an image is pasted while another image is already on display
+document.addEventListener("paste", (event) => {
+    const clipboardItems = event.clipboardData.items;
+
+    for (const item of clipboardItems) {
+        if (item.type.startsWith("image/")) {
+            const imageFile = item.getAsFile();
+
+            resetButton.click();
+            loadImageFile(imageFile);
+
+            event.preventDefault();
+            return;
+        }
+    }
 });
   
 //Check if user does an action
 imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
-
-    if (!file) {
-        return;
-    }
-// make the canvas same size as image
-    const image = new Image();
-    image.onload = () => {
-        preview.width = image.width;
-        preview.height = image.height;
-
-        originalCanvas = document.createElement("canvas");
-        originalCanvas.width = image.width;
-        originalCanvas.height = image.height;
-
-        const originalContext = originalCanvas.getContext("2d");
-        context.clearRect(0, 0, preview.width, preview.height);
-        originalContext.drawImage(image, 0, 0);
-
-        context.drawImage(image, 0, 0);
-        
-        //remove the container border after image upload
-        previewFrame.classList.add("has-image");
-        preview.style.visibility = "visible";
-        preview.style.borderColor = "#f3f0e7";
-        previewPlaceholder.style.display = "none";
-    }
-    //temporary reference
-    image.src = URL.createObjectURL(file);
-
+    loadImageFile(file);
 });
