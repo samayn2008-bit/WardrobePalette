@@ -42,7 +42,7 @@ wardrobe-app
   
 2. Open Terminal and move into the project folder:
 ```bash
-cd "/Users/your-name/App Project/wardrobe-javascript"
+cd "/Users/your-name/wardrobe-app"
 ```
 
 4. Start a local web server, enter this:
